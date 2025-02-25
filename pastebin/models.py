@@ -23,10 +23,10 @@ class Paste(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(max_length=155)
     content = models.TextField(max_length=10000)
-    author = models.ForeignKey(User, models.CASCADE)
+    author = models.ForeignKey(User, models.CASCADE, editable=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    settings = models.ForeignKey("PasteSettings", models.CASCADE)
+    settings = models.ForeignKey("PasteSettings", models.CASCADE, editable=False)
 
 
 class PasteHistory(models.Model):

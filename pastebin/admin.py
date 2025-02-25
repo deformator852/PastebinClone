@@ -1,3 +1,5 @@
 from django.contrib import admin
+from pastebin.models import Paste, PasteSettings
 
-# Register your models here.
+admin.site.register(Paste)
+admin.site.register(PasteSettings)
