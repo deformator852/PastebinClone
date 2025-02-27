@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from pastebin.services import hash_password
-from .models import Paste
+from .models import Category, Comment, Paste, Tag
 from rest_framework import serializers
 from .models import PasteSettings
 import hashlib
@@ -13,7 +13,7 @@ class PasteSettingsSerializer(serializers.ModelSerializer):
         fields = ["visibility", "is_password_protected", "password"]
 
 
-class CreatePastSerializer(serializers.ModelSerializer):
+class CreatePasteSerializer(serializers.ModelSerializer):
     settings = PasteSettingsSerializer()
 
     class Meta:
@@ -30,5 +30,27 @@ class CreatePastSerializer(serializers.ModelSerializer):
         return paste
 
 
-class PasteDetailSerializer(serializers.Serializer):
-    password = serializers.CharField(max_length=255, required=False, default=None)
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ("user", "comment", "created_at")
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = ("name",)
+
+
+class PasteDetailSerializer(serializers.ModelSerializer):
+    comments = CommentSerializer(many=True, read_only=True)
+    tags = TagSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Paste
+        fields = (
+            "title",
+            "content",
+            "comments",
+            "tags",
+        )
